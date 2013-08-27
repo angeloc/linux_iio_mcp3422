@@ -10,37 +10,49 @@ This driver can be used on Raspberry Pi with ADC Pi v2 or DeltaSigma Pi extensio
 
 1. Download this repository
 
-	~/$ git clone https://github.com/angeloc/linux_iio_mcp3422.git
+```bash
+~/$ git clone https://github.com/angeloc/linux_iio_mcp3422.git
+```
 
 2. Download latest 3.10 kernel for the Raspberry Pi from here [3.10.y](https://github.com/raspberrypi/linux/archive/rpi-3.10.y.zip).
 
 3. Make a new default config for the Raspberry Pi:
 
-	~/linux-rpi-3.10.y$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcmrpi_defconfig
+```bash
+~/linux-rpi-3.10.y$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcmrpi_defconfig
+```
 
 4. Enable IIO subsystem:
-	
-	~/linux-rpi-3.10.y$ sed -i "s/CONFIG_IIO=n/CONFIG_IIO=y/" .config
+
+```bash	
+~/linux-rpi-3.10.y$ sed -i "s/CONFIG_IIO=n/CONFIG_IIO=y/" .config
+```
 
 5. Recompile your kernel:
 
-	~/linux-rpi-3.10.y$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make
+```bash
+~/linux-rpi-3.10.y$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make
+```
 
 6. Install uImage and module in the correct folders
 
 7. Compile mcp3422 driver:
 
-	~/linux_iio_mcp3422$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+```bash
+~/linux_iio_mcp3422$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+```
 
 8. Copy *mcp3422.ko* file into /lib/modules/3.10.y/drivers/iio/adc
 
 9. Boot your Raspberry Pi and enable your MCP3422 device (replace 0x68 with the address of your chip on the bus):
 
-	~/# insmod /lib/modules/3.10.y/drivers/iio/adc/mcp3422.c
-
-	~/# echo 0x68 > /sys/bus/i2c/devices/i2c-0/new_device
+```bash
+~/# insmod /lib/modules/3.10.y/drivers/iio/adc/mcp3422.c
+~/# echo 0x68 > /sys/bus/i2c/devices/i2c-0/new_device
+```
 
 10. Use your new device reading files in:
+
 ```bash
 ~/# cd /sys/bus/i2c/devices/0-0068/iio\:device0/
 ~/iio:device0# ls

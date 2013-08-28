@@ -72,5 +72,3 @@ in_voltage_scale_available
 ~/iio:device0# cat in_voltage0_scale
 2.047984375	
 ```
-
-For any comment/suggestion, please mail me at <angelo.compagnucci@gmail.com>.

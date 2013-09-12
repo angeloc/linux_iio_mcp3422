@@ -45,7 +45,7 @@ This driver can be used on Raspberry Pi with ADC Pi v2 or DeltaSigma Pi extensio
 8. Compile mcp3422 driver:
 
 ```bash
-~/linux_iio_mcp3422$ ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make
+~/linux_iio_mcp3422$ KERNELDIR=~/linux-rpi-3.10.y ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make
 ```
 
 8. Copy *mcp3422.ko* file into /media/sdcardp2/lib/modules/3.10.y/drivers/iio/adc

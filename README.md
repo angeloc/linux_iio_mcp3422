@@ -14,12 +14,12 @@ This driver can be used on Raspberry Pi with ADC Pi v2 or DeltaSigma Pi extensio
 ~/$ git clone https://github.com/angeloc/linux_iio_mcp3422.git
 ```
 
-2. Download latest 3.10 kernel for the Raspberry Pi from here [3.10.y](https://github.com/raspberrypi/linux/archive/rpi-3.10.y.zip).
+2. Download latest 3.10 kernel for the Raspberry Pi from here [3.10.y](https://github.com/raspberrypi/linux/archive/rpi-3.10.y.zip) and unzip it somewhere.
 
 3. Make a new default config for the Raspberry Pi:
 
 ```bash
-~/linux-rpi-3.10.y$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bcmrpi_defconfig
+~/linux-rpi-3.10.y$ ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-  make bcmrpi_defconfig
 ```
 
 4. Enable IIO subsystem:
@@ -31,18 +31,24 @@ This driver can be used on Raspberry Pi with ADC Pi v2 or DeltaSigma Pi extensio
 5. Recompile your kernel:
 
 ```bash
-~/linux-rpi-3.10.y$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make
+~/linux-rpi-3.10.y$ ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-  make
 ```
 
-6. Install uImage and module in the correct folders
+6. Replace the raspberry pi kernel /media/sdcardp1/kernel.img with your new kernel file arch/arm/boot/Image.
 
-7. Compile mcp3422 driver:
+7. Install kernel modules you compiled with:
 
 ```bash
-~/linux_iio_mcp3422$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+~/linux_iio_mcp3422$ ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make modules_install INSTALL_MOD_PATH=/media/sdcardp2/
 ```
 
-8. Copy *mcp3422.ko* file into /lib/modules/3.10.y/drivers/iio/adc
+8. Compile mcp3422 driver:
+
+```bash
+~/linux_iio_mcp3422$ ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- make
+```
+
+8. Copy *mcp3422.ko* file into /media/sdcardp2/lib/modules/3.10.y/drivers/iio/adc
 
 9. Boot your Raspberry Pi and enable your MCP3422 device (replace 0x68 with the address of your chip on the bus):
 
@@ -67,8 +73,4 @@ in_voltage3_scale
 in_voltage_sampling_frequency
 in_voltage_scale_available
 ~/iio:device0# cat in_voltage0_scale
-2.047000000
-~/iio:device0# echo 3 > in_voltage_sampling_frequency
-~/iio:device0# cat in_voltage0_scale
-2.047984375	
-```
+2.047

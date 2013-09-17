@@ -320,7 +320,7 @@ static const struct iio_info mcp3422_info = {
 static int mcp3422_probe(struct i2c_client *client,
 			 const struct i2c_device_id *id)
 {
-	struct iio_dev *iio;
+	struct iio_dev *indio_dev;
 	struct mcp3422 *adc;
 	int err;
 	u8 config;
@@ -328,61 +328,52 @@ static int mcp3422_probe(struct i2c_client *client,
 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C))
 		return -ENODEV;
 
-    iio = iio_device_alloc(sizeof(*adc));
-    if (!iio)
-            return -ENOMEM;
+	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*adc));
+	if (!indio_dev)
+		return -ENOMEM;
 
-    adc = iio_priv(iio);
-    adc->i2c = client;
+	adc = iio_priv(indio_dev);
+	adc->i2c = client;
 
-    mutex_init(&adc->lock);
+	mutex_init(&adc->lock);
 
-    iio->dev.parent = &client->dev;
-    iio->name = dev_name(&client->dev);
-    iio->modes = INDIO_DIRECT_MODE;
-    iio->info = &mcp3422_info;
+	indio_dev->dev.parent = &client->dev;
+	indio_dev->name = dev_name(&client->dev);
+	indio_dev->modes = INDIO_DIRECT_MODE;
+	indio_dev->info = &mcp3422_info;
 
-    switch ((unsigned int)(id->driver_data)) {
-    case 2:
-    case 3:
-        iio->channels = mcp3422_channels;
-        iio->num_channels = ARRAY_SIZE(mcp3422_channels);
-        break;
-    case 4:
-        iio->channels = mcp3424_channels;
-        iio->num_channels = ARRAY_SIZE(mcp3424_channels);
-        break;
-    }
+	switch ((unsigned int)(id->driver_data)) {
+	case 2:
+	case 3:
+		indio_dev->channels = mcp3422_channels;
+		indio_dev->num_channels = ARRAY_SIZE(mcp3422_channels);
+		break;
+	case 4:
+		indio_dev->channels = mcp3424_channels;
+		indio_dev->num_channels = ARRAY_SIZE(mcp3424_channels);
+		break;
+	}
 
-    /* meaningful default configuration */
-    config = (MCP3422_CONT_SAMPLING
-              | MCP3422_CHANNEL_VALUE(1)
-              | MCP3422_PGA_VALUE(MCP3422_PGA_1)
-              | MCP3422_SAMPLE_RATE_VALUE(MCP3422_SRATE_240));
-    mcp3422_update_config(adc, config);
+	/* meaningful default configuration */
+	config = (MCP3422_CONT_SAMPLING
+		| MCP3422_CHANNEL_VALUE(1)
+		| MCP3422_PGA_VALUE(MCP3422_PGA_1)
+		| MCP3422_SAMPLE_RATE_VALUE(MCP3422_SRATE_240));
+	mcp3422_update_config(adc, config);
 
-    err = iio_device_register(iio);
-    if (err < 0)
-            goto iio_free;
+	err = iio_device_register(indio_dev);
+	if (err < 0)
+		return err;
 
-    i2c_set_clientdata(client, iio);
+	i2c_set_clientdata(client, indio_dev);
 
-    return 0;
-
-iio_free:
-    iio_device_free(iio);
-
-    return err;
+	return 0;
 }
 
 static int mcp3422_remove(struct i2c_client *client)
 {
-    struct iio_dev *iio = i2c_get_clientdata(client);
-
-    iio_device_unregister(iio);
-    iio_device_free(iio);
-
-    return 0;
+	iio_device_unregister(i2c_get_clientdata(client));
+	return 0;
 }
 
 static const struct i2c_device_id mcp3422_id[] = {

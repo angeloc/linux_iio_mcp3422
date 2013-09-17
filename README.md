@@ -55,7 +55,7 @@ This driver can be used on Raspberry Pi with ADC Pi v2 or DeltaSigma Pi extensio
 9. Boot your Raspberry Pi and enable your MCP3422 device (replace 0x68 with the address of your chip on the bus):
 
 ```bash
-~/# insmod /lib/modules/3.10.y/drivers/iio/adc/mcp3422.c
+~/# insmod /lib/modules/3.10.y/drivers/iio/adc/mcp3422.ko
 ~/# echo 0x68 > /sys/bus/i2c/devices/i2c-0/new_device
 ```
 

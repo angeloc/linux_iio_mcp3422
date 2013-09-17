@@ -2,7 +2,9 @@
 
 This is an out of tree kernel driver for Microchip's  MCP3422, MCP3423, MCP3424 high resolution ADC.
 
-This driver supports only kernel release less than 3.10, for 3.11 onward this driver is in kernel tree.
+This driver supports only kernel release less than 3.12, for 3.13 onward this driver is in kernel tree.
+
+To use the driver on Linux <= 3.10 stay on master branch, if you have a kernel >= 3.11 switch to 3.11 branch.
 
 This driver can be used on Raspberry Pi with ADC Pi v2 or DeltaSigma Pi extensions boards from [Abelectronics](http://www.abelectronics.co.uk).
 

@@ -34,7 +34,7 @@ This driver can be used on Raspberry Pi with ADC Pi v2 or DeltaSigma Pi extensio
 	 ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-  make prepare scripts
 	```
 
-Press Enter for each unsetted option until the kernel begins to compile.
+	Press Enter for each unsetted option until the kernel begins to compile.
 
 5. Recompile your kernel:
 

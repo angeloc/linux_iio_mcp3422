@@ -27,8 +27,14 @@ This driver can be used on Raspberry Pi with ADC Pi v2 or DeltaSigma Pi extensio
 4. Enable IIO subsystem:
 
 ```bash	
-~/linux-rpi-3.10.y$ sed -i "s/CONFIG_IIO=n/CONFIG_IIO=y/" .config
+~/linux-rpi-3.10.y$ ./scripts/config --enable I2C; \
+./scripts/config --enable IIO; \
+./scripts/config --enable I2C_BCM2708; \
+./scripts/config --set-val I2C_BCM2708_BAUDRATE 400000; \
+ ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-  make prepare scripts
 ```
+
+Press Enter for each unsetted option until the kernel begins to compile.
 
 5. Recompile your kernel:
 

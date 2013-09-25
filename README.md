@@ -62,7 +62,7 @@ This driver can be used on Raspberry Pi with ADC Pi v2 or DeltaSigma Pi extensio
 
 	```bash
 	~/# insmod /lib/modules/3.10.y/drivers/iio/adc/mcp3422.ko
-	~/# echo 0x68 > /sys/bus/i2c/devices/i2c-0/new_device
+	~/# echo mcp3424 0x68 > /sys/bus/i2c/devices/i2c-0/new_device
 	```
 
 10. Use your new device reading files in:
